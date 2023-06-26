@@ -27,14 +27,14 @@ class DemoApplicationTests {
     @Test
     void testJpa() {
         Question q1 = new Question();
-        q1.setSubject("Q1 테스트?");
-        q1.setContent("set content");
+        q1.setSubject("q1subject");
+        q1.setContent("q1content");
         q1.setCreateDate(LocalDateTime.now());
         this.questionRepository.save(q1);  // 첫번째 질문 저장
 
         Question q2 = new Question();
-        q2.setSubject("setSubject");
-        q2.setContent("set Content");
+        q2.setSubject("q2subject");
+        q2.setContent("q2content");
         q2.setCreateDate(LocalDateTime.now());
         this.questionRepository.save(q2);  // 두번째 질문 저장
     }
