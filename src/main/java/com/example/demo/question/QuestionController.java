@@ -2,9 +2,12 @@ package com.example.demo.question;
 
 import com.example.demo.question.Question;
 import com.example.demo.question.QuestionService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +33,22 @@ public class QuestionController {
         return "question/question_detail";
     }
 
+
     @GetMapping("/create")
     public String questionCreate() {
         return "question/question_form";
     }
 
+    // 질문 저장후 질문목록으로 리턴
+    //Valid를 통해
     @PostMapping("/create")
-    public String questionCreate(@RequestParam String subject, @RequestParam String content) {
-        this.questionService.create(subject, content);
-        return "redirect:/question/list"; // 질문 저장후 질문목록으로 이동
+    public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult) {
+        // @Valid 애너테이션을 적용하면 QuestionForm의 @NotEmpty, @Size 등으로 설정한 검증 기능이 동작
+        // BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체
+        if (bindingResult.hasErrors()) {
+            return "question/question_form";
+        }
+        this.questionService.create(questionForm.getSubject(), questionForm.getContent());
+        return "redirect:/question/list";
     }
 }
