@@ -35,7 +35,7 @@ public class QuestionController {
 
 
     @GetMapping("/create")
-    public String questionCreate() {
+    public String questionCreate(Question question) {
         return "question/question_form";
     }
 
@@ -44,7 +44,8 @@ public class QuestionController {
     @PostMapping("/create")
     public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult) {
         // @Valid 애너테이션을 적용하면 QuestionForm의 @NotEmpty, @Size 등으로 설정한 검증 기능이 동작
-        // BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체
+        // BindingResult 매개변수는 @Valid 애너테이션으로 인해 검증이 수행된 결과를 의미하는 객체.
+        // BindingResult는 그렇기 떄문에 @Valid바로 뒤에 위치해야 한다.
         if (bindingResult.hasErrors()) {
             return "question/question_form";
         }
