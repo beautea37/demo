@@ -2,9 +2,14 @@ package com.example.demo.question;
 
 import com.example.demo.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +18,6 @@ import java.util.Optional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
-
     public List<Question> getList() {
         return this.questionRepository.findAll();
     }
@@ -37,6 +41,15 @@ public class QuestionService {
         q.setContent(content);
         q.setCreateDate(LocalDateTime.now());
         this.questionRepository.save(q);
+    }
+
+    //페이징 처리
+    public Page<Question> getList(int page) {
+        //페이지 역순하기 위해 Sort.Order로 리스트 추출, desc로 날짜 기준 역순
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.questionRepository.findAll(pageable);
     }
 }
 
