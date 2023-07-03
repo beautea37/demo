@@ -143,7 +143,7 @@ class DemoApplicationTests {
         for (int i = 1; i <= 111; i++) {
             String subject = String.format("테스트 데이터입니다:[%03d]", i);
             String content = "내용무";
-            this.questionService.create(subject, content);
+            this.questionService.create(subject, content, null);
         }
     }
 }
