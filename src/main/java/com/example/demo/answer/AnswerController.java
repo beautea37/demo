@@ -25,6 +25,7 @@ public class AnswerController {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final UserService userService;
+
     @PostMapping("/create/{id}")
     @PreAuthorize("isAuthenticated()")
     public String createAnswer(Model model, @PathVariable("id") Integer id,
@@ -40,9 +41,10 @@ public class AnswerController {
             return "question/question_detail";
         }
         // 3. 검사 결과에 오류가 없는 경우, 답변을 생성
-        this.answerService.create(question, answerForm.getContent(), siteUser);
+        Answer answer = this.answerService.create(question, answerForm.getContent(), siteUser);
         // 4. 생성된 답변이 포함된 질문 상세 페이지로 리다이렉트
-        return String.format("redirect:/question/detail/%s", id);
+        return String.format("redirect:/question/detail/%s#answer_%s",
+                answer.getQuestion().getId(), answer.getId());
     }
 
     //수정
@@ -54,8 +56,10 @@ public class AnswerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한 X");
         }
         answerForm.setContent(answer.getContent());
-        return "answer/answer_form";
+        return String.format("redirect:/question/detail/%s#answer_%s",
+                answer.getQuestion().getId(), answer.getId());
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
@@ -69,7 +73,8 @@ public class AnswerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한 x");
         }
         this.answerService.modify(answer, answerForm.getContent());
-        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+        return String.format("redirect:/question/detail/%s#answer_%s",
+                answer.getQuestion().getId(), answer.getId());
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -81,6 +86,16 @@ public class AnswerController {
         }
         this.answerService.delete(answer);
         return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String answerVote(Principal principal, @PathVariable("id") Integer id) {
+        Answer answer = this.answerService.getAnswer(id);
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        this.answerService.vote(answer, siteUser);
+        return String.format("redirect:/question/detail/%s#answer_%s",
+                answer.getQuestion().getId(), answer.getId());
     }
 
 }

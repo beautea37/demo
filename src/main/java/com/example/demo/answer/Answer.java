@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -27,4 +29,9 @@ public class Answer {
     private SiteUser author;
 
     private LocalDateTime modifyDate;
+
+    //List가 아닌 Set인 이유는 중복되면 안되기 때문
+    @ManyToMany
+    Set<SiteUser> voter;
+
 }

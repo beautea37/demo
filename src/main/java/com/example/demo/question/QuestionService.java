@@ -1,12 +1,15 @@
 package com.example.demo.question;
 
 import com.example.demo.DataNotFoundException;
+import com.example.demo.answer.Answer;
 import com.example.demo.user.SiteUser;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,11 +22,31 @@ import java.util.Optional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+
+
+    //검색 활용
+    private Specification<Question> search(String kw) {
+        return new Specification<>() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public Predicate toPredicate(Root<Question> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                //q를 통해 Question의 root 엔티티 객체 땡겨옴. (질문 제목, 내용 검색용)
+                query.distinct(true);  // 중복을 제거
+                Join<Question, SiteUser> u1 = q.join("author", JoinType.LEFT); //siteUser와 Question의 엔티티 중복값 author를 같이 조인함
+                Join<Question, Answer> a = q.join("answerList", JoinType.LEFT); //Question과 Answer이 answerList로 교집합이기 때문에 같이 조인침
+                Join<Answer, SiteUser> u2 = a.join("author", JoinType.LEFT); //비슷해
+                return cb.or(cb.like(q.get("subject"), "%" + kw + "%"), // 제목
+                        cb.like(q.get("content"), "%" + kw + "%"),      // 내용
+                        cb.like(u1.get("username"), "%" + kw + "%"),    // 질문 작성자
+                        cb.like(a.get("content"), "%" + kw + "%"),      // 답변 내용
+                        cb.like(u2.get("username"), "%" + kw + "%"));   // 답변 작성자
+            }
+        };
+    }
+
     public List<Question> getList() {
         return this.questionRepository.findAll();
     }
-
-
     //
     public Question getQuestion(Integer id) {
         Optional<Question> question = this.questionRepository.findById(id);
@@ -44,12 +67,13 @@ public class QuestionService {
     }
 
     //페이징 처리
-    public Page<Question> getList(int page) {
+    public Page<Question> getList(int page, String kw) {
         //페이지 역순하기 위해 Sort.Order로 리스트 추출, desc로 날짜 기준 역순
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.questionRepository.findAll(pageable);
+        Specification<Question> spec = search(kw);
+        return this.questionRepository.findAllByKeyword(kw, pageable);
     }
 
     public void modify(Question question, String subject, String content) {
@@ -62,5 +86,13 @@ public class QuestionService {
     public void delete(Question question) {
         this.questionRepository.delete(question);
     }
+
+    //추천
+    public void vote(Question question, SiteUser siteUser) {
+        question.getVoter().add(siteUser);
+        this.questionRepository.save(question);
+    }
+
+    
 }
 

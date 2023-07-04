@@ -35,8 +35,13 @@ dependencies {
     //Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+
+    //jar파일 배포용 의존성 추가
+    runtimeOnly("org.springframework.boot:spring-boot-starter-tomcat")
 }
 
 tasks.named('test') {
+    
+    
     useJUnitPlatform()
 }
