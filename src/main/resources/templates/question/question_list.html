@@ -19,7 +19,7 @@
                 <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
                 <span class="text-danger small ms-2"
                       th:if="${#lists.size(question.answerList) > 0}">
-                     [[${#lists.size(question.answerList)}]] 개의 댓글이 있습니다.
+                     [[${#lists.size(question.answerList)}]]
                 </span>
                 <!--                위랑 같지만 다른 방식. 혹시 몰라서-->
                 <!--                <span class="text-danger small ms-2"-->

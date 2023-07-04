@@ -2,23 +2,27 @@
 
 <div layout:fragment="content" class="container">
     <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-    <!--        th:object를 통해 객체 참조를 하겠다는 것이고, post 뿐만 아니라 getmapping에서도 questionForm객체를 생성해줘야 한다.-->
-    <form th:action="@{/question/create}" th:object="${questionForm}" method="post">
-<!--        참조했을 때 내가 건 조건을 만족하지 않으면 form_errors의 formErrors div태그 출력-->
-        <div th:replace="~{form_errors :: formErrors}"></div>
-        <div class="mb-3">
-            <label for="subject" class="form-label">제목</label>
-            <!--            subject 제목 필드 태그. th:field는 submit해서 오류가 있더라도 그 안에 있는 값이 유지되게끔 해주는 코드.-->
-            <input type="text" th:field="*{subject}" class="form-control">
+    <form th:object="${questionForm}" method="post">
+        <!--        수정-->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <!--        th:object를 통해 객체 참조를 하겠다는 것이고, post 뿐만 아니라 getmapping에서도 questionForm객체를 생성해줘야 한다.-->
+        <form th:action="@{/question/create}" th:object="${questionForm}" method="post">
+            <!--        참조했을 때 내가 건 조건을 만족하지 않으면 form_errors의 formErrors div태그 출력-->
+            <div th:replace="~{form_errors :: formErrors}"></div>
+            <div class="mb-3">
+                <label for="subject" class="form-label">제목</label>
+                <!--            subject 제목 필드 태그. th:field는 submit해서 오류가 있더라도 그 안에 있는 값이 유지되게끔 해주는 코드.-->
+                <input type="text" th:field="*{subject}" class="form-control">
 
-        </div>
-        <div class="mb-3">
-            <label for="content" class="form-label">내용</label>
-            <!--            content 내용 필드 생성. th:field는 submit해서 오류가 있더라도 그 안에 있는 값이 유지되게끔 해주는 코드.-->
-            <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label">내용</label>
+                <!--            content 내용 필드 생성. th:field는 submit해서 오류가 있더라도 그 안에 있는 값이 유지되게끔 해주는 코드.-->
+                <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
 
-        </div>
-        <input type="submit" value="저장하기" class="btn btn-primary my-2">
+            </div>
+            <input type="submit" value="저장하기" class="btn btn-primary my-2">
+        </form>
     </form>
 </div>
 </html>
