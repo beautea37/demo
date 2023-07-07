@@ -58,12 +58,13 @@ public class QuestionService {
     }
     //글 저장
     public void create(String subject, String content, SiteUser user) {
-        Question q = new Question();
-        q.setSubject(subject);
-        q.setContent(content);
-        q.setCreateDate(LocalDateTime.now());
-        q.setAuthor(user);
-        this.questionRepository.save(q);
+        Question question = Question.builder()
+                .subject(subject)
+                .content(content)
+                .createDate(LocalDateTime.now())
+                .author(user)
+                .build();
+        this.questionRepository.save(question);
     }
 
     //페이징 처리
@@ -76,13 +77,28 @@ public class QuestionService {
         return this.questionRepository.findAllByKeyword(kw, pageable);
     }
 
-    public void modify(Question question, String subject, String content) {
-        question.setSubject(subject);
-        question.setContent(content);
-        question.setModifyDate(LocalDateTime.now());
-        this.questionRepository.save(question);
-    }
+//    public void modify(Question question, String subject, String content) {
+//        question.setSubject(subject);
+//        question.setContent(content);
+//        question.setModifyDate(LocalDateTime.now());
+//        this.questionRepository.save(question);
+//    }
 
+public void modify(Question question, String subject, String content) {
+    Question modifiedQuestion = question.toBuilder()
+            .subject(subject)
+            .content(content)
+            .modifyDate(LocalDateTime.now())
+            .build();
+
+    this.questionRepository.save(modifiedQuestion);
+}
+
+
+//    public void modify(Question question, String subject, String content) {
+//        Question question1 = Question.builder()
+//
+//    }
     public void delete(Question question) {
         this.questionRepository.delete(question);
     }

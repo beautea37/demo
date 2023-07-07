@@ -11,7 +11,7 @@ sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
-}
+}\
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -44,4 +44,9 @@ tasks.named('test') {
     
     
     useJUnitPlatform()
+}
+
+// JAR 패키징 설정
+jar {
+    enabled = true
 }

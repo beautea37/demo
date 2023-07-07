@@ -31,18 +31,21 @@ class DemoApplicationTests {
     //Question Test
     @Test
     void testJpa() {
-        Question q1 = new Question();
-        q1.setSubject("q1subject");
-        q1.setContent("q1content");
-        q1.setCreateDate(LocalDateTime.now());
-        this.questionRepository.save(q1);  // 첫번째 질문 저장
+        Question q1 = Question.builder()
+                .subject("q1subject")
+                .content("q1content")
+                .createDate(LocalDateTime.now())
+                .build();
+        this.questionRepository.save(q1); // 첫번째 질문 저장
 
-        Question q2 = new Question();
-        q2.setSubject("q2subject");
-        q2.setContent("q2content");
-        q2.setCreateDate(LocalDateTime.now());
-        this.questionRepository.save(q2);  // 두번째 질문 저장
+        Question q2 = Question.builder()
+                .subject("q2subject")
+                .content("q2content")
+                .createDate(LocalDateTime.now())
+                .build();
+        this.questionRepository.save(q2); // 두번째 질문 저장
     }
+
 
     @Test
     void findAllJpa() {
@@ -99,30 +102,30 @@ class DemoApplicationTests {
 //        Question q = this.questionRepository.findBySubject("Q1 테스트?");
 //        assertEquals(4, q.getId());
 
-        Question q = this.questionRepository.findBySubject("sbb가 무엇인가요?");
+        Question q = this.questionRepository.findBySubject("subject q");
         assertEquals(1, q.getId());
         System.out.println("----------------" + q);
     }
 
     @Test
     void findSubjectAndContent() {
-        Question q = this.questionRepository.findBySubjectAndContent("sbb가 무엇인가요?", "sbb에 대해서 알고 싶습니다.");
+        Question q = this.questionRepository.findBySubjectAndContent("subject", "asdfaasdfadsf");
         assertEquals(1, q.getId());
     }
 
     @Test
     void findBySubjectList() {
-        List<Question> qList = this.questionRepository.findBySubjectLike("sbb%");   //시작이 sbb
+        List<Question> qList = this.questionRepository.findBySubjectLike("asdf");   //시작이 asdf
         Question q = qList.get(0);
-        assertEquals("sbb가 무엇인가요?", q.getSubject());
+        assertEquals("asdfsafdas", q.getSubject());
     }
 
     @Test
     void modifySubject() {
         Optional<Question> mq = this.questionRepository.findById(1);
 
-        Question q = mq.get();
-        q.setSubject("수정 테스트1");
+        Question q = Question.builder()
+                .subject("수정 테스트1").build();
         this.questionRepository.save(q);
     }
 
@@ -141,7 +144,7 @@ class DemoApplicationTests {
     @Test
     void pagingTest() {
         for (int i = 1; i <= 111; i++) {
-            String subject = String.format("테스트 데이터입니다:[%03d]", i);
+            String subject = String.format("테스트 데이터 : [%03d]", i);
             String content = "내용무";
             this.questionService.create(subject, content, null);
         }

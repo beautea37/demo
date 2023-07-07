@@ -15,10 +15,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     //회원가입
     public SiteUser create(String username, String email, String password) {
-        SiteUser user = new SiteUser();
-        user.setUserName(username);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
+        SiteUser user = SiteUser.builder()
+                .userName(username)
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .build();
         this.userRepository.save(user);
         return user;
     }

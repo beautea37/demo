@@ -2,16 +2,16 @@ package com.example.demo.user;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.PackagePrivate;
 
 @Getter
-@Setter
+@NoArgsConstructor
 @Entity
-//시큐리티에 이미 User클래스가 있기 때문에 User는 피해서 네이밍 해야 함.
 public class SiteUser {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,4 +24,10 @@ public class SiteUser {
     @Column(unique = true)
     private String email;
 
+    @Builder
+    public SiteUser(String userName, String password, String email) {
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+    }
 }
