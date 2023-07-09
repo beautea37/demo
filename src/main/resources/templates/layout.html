@@ -12,11 +12,12 @@
     <title>플젝</title>
 </head>
 <body>
+
 <!-- 네비게이션바. navbar.html 속 fragment태그 출력 -->
 <nav th:replace="~{navbar :: navbarFragment}"></nav>
-<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+
+<!-- 기본 템플릿 안에 삽입될 내용 파트 -->
 <th:block layout:fragment="content"></th:block>
-<!-- 기본 템플릿 안에 삽입될 내용 End -->
 
 <!-- 자바스크립트 Start -->
 <th:block layout:fragment="script"></th:block>

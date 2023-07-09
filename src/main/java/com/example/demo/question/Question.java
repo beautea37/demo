@@ -51,7 +51,8 @@ public class Question {
 //        this.voter = voter;
 //    }
 
-    @Builder(toBuilder = true)
+
+    @Builder(toBuilder = true)      //#toBuilder. 기존 빌더 내용에서 따로 추가하지 않고 일부만 변경할 수 있게끔 해줌
     public Question(String subject, String content, LocalDateTime createDate,
                     List<Answer> answerList, SiteUser author, LocalDateTime modifyDate, Set<SiteUser> voter) {
         this.subject = subject;

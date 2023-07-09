@@ -7,7 +7,9 @@
         </div>
     </div>
     <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+        <!--        userCreateForm을 통해 회원가입 제약 걸어놓음-->
         <div th:replace="~{form_errors :: formErrors}"></div>
+        <!--        폼 에러시 빠꾸시김-->
         <div class="mb-3">
             <label for="username" class="form-label">사용자ID</label>
             <input type="text" th:field="*{username}" class="form-control">

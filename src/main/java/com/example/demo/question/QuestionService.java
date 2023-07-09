@@ -30,6 +30,7 @@ public class QuestionService {
             private static final long serialVersionUID = 1L;
             @Override
             public Predicate toPredicate(Root<Question> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                //자세한 내용은 Repository로
                 //q를 통해 Question의 root 엔티티 객체 땡겨옴. (질문 제목, 내용 검색용)
                 query.distinct(true);  // 중복을 제거
                 Join<Question, SiteUser> u1 = q.join("author", JoinType.LEFT); //siteUser와 Question의 엔티티 중복값 author를 같이 조인함
@@ -47,7 +48,8 @@ public class QuestionService {
     public List<Question> getList() {
         return this.questionRepository.findAll();
     }
-    //
+
+
     public Question getQuestion(Integer id) {
         Optional<Question> question = this.questionRepository.findById(id);
         if (question.isPresent()) {
@@ -56,6 +58,7 @@ public class QuestionService {
             throw new DataNotFoundException("question not found");
         }
     }
+
     //글 저장
     public void create(String subject, String content, SiteUser user) {
         Question question = Question.builder()
@@ -67,7 +70,7 @@ public class QuestionService {
         this.questionRepository.save(question);
     }
 
-    //페이징 처리
+    //#페이징, #페이지 처리
     public Page<Question> getList(int page, String kw) {
         //페이지 역순하기 위해 Sort.Order로 리스트 추출, desc로 날짜 기준 역순
         List<Sort.Order> sorts = new ArrayList<>();
@@ -77,38 +80,27 @@ public class QuestionService {
         return this.questionRepository.findAllByKeyword(kw, pageable);
     }
 
-//    public void modify(Question question, String subject, String content) {
-//        question.setSubject(subject);
-//        question.setContent(content);
-//        question.setModifyDate(LocalDateTime.now());
-//        this.questionRepository.save(question);
-//    }
 
+    //#수정
 public void modify(Question question, String subject, String content) {
     Question modifiedQuestion = question.toBuilder()
             .subject(subject)
             .content(content)
             .modifyDate(LocalDateTime.now())
             .build();
-
+    //#tobuilder 써서 일부만 객체로 땡겨와서 수정되어야할 곳에 수정
     this.questionRepository.save(modifiedQuestion);
 }
 
-
-//    public void modify(Question question, String subject, String content) {
-//        Question question1 = Question.builder()
-//
-//    }
+    //#삭제
     public void delete(Question question) {
         this.questionRepository.delete(question);
     }
 
-    //추천
+    //#추천
     public void vote(Question question, SiteUser siteUser) {
         question.getVoter().add(siteUser);
         this.questionRepository.save(question);
     }
-
-    
 }
 

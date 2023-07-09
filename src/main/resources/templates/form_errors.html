@@ -2,3 +2,5 @@
      role="alert" th:if="${#fields.hasAnyErrors()}">
   <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
 </div>
+
+<!--여기저기 'formErrors'를 통해 spring의 Form 유효성 검증 위해 쓰인다. 자주 쓰여서 따로 빼놓은거.-->

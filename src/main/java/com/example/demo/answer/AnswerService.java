@@ -25,9 +25,9 @@ public class AnswerService {
     }
 
 
-    // 이 메소드는 id를 사용하여 Answer 가져옴
+    // id를 사용하여 Answer 가져옴
     public Answer getAnswer(Integer id) {
-        // findById를 사용하여 DB에 Answer있는지 확인
+        // findById를 사용하여 DB에 Answerrk있는지 확인
         Optional<Answer> answer = this.answerRepository.findById(id);
 
         // Optional 객체에 Answer가 포함되어 있을 경우, 해당 Answer를 리턴
@@ -39,7 +39,7 @@ public class AnswerService {
         }
     }
 
-    // 이 메소드는 Answer 객체의 내용을 수정하고 저장소에 변경 사항을 저장
+    // #수정. Answer 객체의 내용을 수정하고 저장소에 변경 사항을 저장
     public void modify(Answer answer, String content) {
         // 새로운 내용으로 Answer의 내용을 변경
         answer.setContent(content);

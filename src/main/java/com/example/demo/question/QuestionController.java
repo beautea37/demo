@@ -27,17 +27,18 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final UserService userService;
+
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,
-                       @RequestParam(value="kw", defaultValue="") String kw) {
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page,     //페이징 정보 받는 파라미터
+                       @RequestParam(value="kw", defaultValue="") String kw) {      //#검색. 검색할 때 KeyWord를 받아놓음.
         Page<Question> paging = this.questionService.getList(page, kw);
-        model.addAttribute("paging", paging);
-        model.addAttribute("kw", kw);
+        model.addAttribute("paging", paging);       //#페이지 #페이징 정보를 받아오는 곳
+        model.addAttribute("kw", kw);       //#검색 키워드 모델에다가 저장.
         return "question/question_list";
     }
 
     @GetMapping(value = "/detail/{id}")
-    //AnswerForm을 객체로 안에 넣어놓는 이유는, 유효성검사를 위해서임.
+    //AnswerForm을 객체로 안에 넣어놓는 이유는, #유효성검사를 위해서
     //당장에 객체로 사용하지 않지만 'question_detail'에 들어갈 때 thymeleaf 안에 있는 th:object 객체 참조가 안돼서 form 태그에서 thymeleaf에러가 뜸
     //둘다 뺼거 아니면 걍 입닫고 넣어라.
     public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
@@ -52,6 +53,7 @@ public class QuestionController {
     public String questionCreate(QuestionForm questionForm) {
         return "question/question_form";
     }
+
 
     // 질문 저장후 질문목록으로 리턴
     //Valid를 통해 QuestionForm의 유효성검사 컨펌함. thymeleaf에서 th:object 연결해 줘야함.
@@ -82,6 +84,9 @@ public class QuestionController {
         return "question/question_form";
     }
 
+    
+    
+    //#수정. AnswerController와 같은 패턴
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String questionModify(@Valid QuestionForm questionForm, BindingResult bindingResult,
@@ -97,6 +102,7 @@ public class QuestionController {
         return String.format("redirect:/question/detail/%s", id);
     }
 
+    //#삭제. AnswerController와 같은 패턴
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String questionDelete(Principal principal, @PathVariable("id") Integer id) {

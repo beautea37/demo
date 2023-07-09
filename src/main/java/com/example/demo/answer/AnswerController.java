@@ -26,10 +26,12 @@ public class AnswerController {
     private final AnswerService answerService;
     private final UserService userService;
 
+
+    //#답변 저장, #답변 #저장
     @PostMapping("/create/{id}")
     @PreAuthorize("isAuthenticated()")
     public String createAnswer(Model model, @PathVariable("id") Integer id,
-                               //bindgResult는 폼 검증 결과로 AnswerForm 검증한다. Principal은 인증된 사용자 정보 담고있는 것
+                               //#bindingResul, #인증 은 폼 검증 결과로 AnswerForm 검증한다. #Principal은 인증된 사용자 정보 담고있는 것
                                @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal) {
         // 1. 질문 아이디로 질문을 조회
         Question question = this.questionService.getQuestion(id);
@@ -47,7 +49,7 @@ public class AnswerController {
                 answer.getQuestion().getId(), answer.getId());
     }
 
-    //수정
+    //#수정 get
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String answerModify(AnswerForm answerForm, @PathVariable("id") Integer id, Principal principal) {
@@ -61,6 +63,7 @@ public class AnswerController {
     }
 
 
+    //#수정 post
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String answerModify(@Valid AnswerForm answerForm, BindingResult bindingResult,
@@ -77,6 +80,8 @@ public class AnswerController {
                 answer.getQuestion().getId(), answer.getId());
     }
 
+
+    //#삭제 get
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String answerDelete(Principal principal, @PathVariable("id") Integer id) {
@@ -88,6 +93,7 @@ public class AnswerController {
         return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
     }
 
+    //#삭제 post
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
     public String answerVote(Principal principal, @PathVariable("id") Integer id) {
