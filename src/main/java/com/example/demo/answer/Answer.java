@@ -30,7 +30,7 @@ public class Answer {
 
     private LocalDateTime modifyDate;
 
-    //List가 아닌 Set인 이유는 중복되면 안되기 때문
+    //#추천 List가 아닌 Set인 이유는 중복되면 안되기 때문
     @ManyToMany
     Set<SiteUser> voter;
 
