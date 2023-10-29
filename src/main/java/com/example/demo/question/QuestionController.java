@@ -71,6 +71,7 @@ public class QuestionController {
         return "redirect:/question/list";
     }
 
+
     //수정하기
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
