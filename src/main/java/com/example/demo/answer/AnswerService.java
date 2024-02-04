@@ -14,6 +14,10 @@ import java.util.Optional;
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
+
+
+
+    //
     public Answer create(Question question, String content, SiteUser author) {
         Answer answer = new Answer();
         answer.setContent(content);
@@ -49,6 +53,7 @@ public class AnswerService {
         this.answerRepository.save(answer);
     }
 
+    //#삭제
     public void delete(Answer answer) {
         this.answerRepository.delete(answer);
     }
