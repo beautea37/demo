@@ -20,6 +20,7 @@
             <th style="width:50%">제목</th>
             <th>작성자</th>
             <th>작성일시</th>
+            <th>추천</th>
         </tr>
         </thead>
         <tbody>
@@ -50,8 +51,18 @@
 
             <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>
+<!--        <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"-->
+<!--           th:data-uri="@{|/question/vote/${question.id}|}">-->
+<!--&lt;!&ndash;            <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>&ndash;&gt;-->
+<!--            <li th:each="voter : ${question.voter}">-->
+<!--                &lt;!&ndash; Display voter information, replace with actual user attributes &ndash;&gt;-->
+<!--                <span th:text="${voter.username}"></span>-->
+<!--            </li>-->
+<!--        </a>-->
         </tbody>
     </table>
+
+
     <!-- 페이징처리 시작 -->
     <div th:if="${!paging.isEmpty()}">
         <ul class="pagination justify-content-center">

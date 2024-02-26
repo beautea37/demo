@@ -21,6 +21,7 @@
                     추천
                     <span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span>
                 </a>
+
                 <!--                수정-->
                 <a th:href="@{|/question/modify/${question.id}|}" class="btn btn-sm btn-outline-secondary"
                    sec:authorize="isAuthenticated()"
